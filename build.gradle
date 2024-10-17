@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'ilya.project'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-parent:3.3.2'
+    implementation 'org.springframework.boot:spring-boot-starter:3.2.2'
+}
+
+publishing {
+    publications {
+        maven (MavenPublication) {
+            groupId = rootProject.getGroup()
+            artifactId = rootProject.getName()
+            version = rootProject.getVersion()
+
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url = "file://${project.projectDir.toString()}/maven-repo/"
+        }
+    }
+}
