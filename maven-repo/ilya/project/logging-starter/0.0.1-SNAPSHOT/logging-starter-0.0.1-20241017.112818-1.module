@@ -1,0 +1,76 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "ilya.project",
+    "module": "logging-starter",
+    "version": "0.0.1-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.10.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "logging-starter-0.0.1-SNAPSHOT.jar",
+          "url": "logging-starter-0.0.1-SNAPSHOT.jar",
+          "size": 1453,
+          "sha512": "12aad5ab9a270faf604d4d6af6ce879d119c0b7ba43771201e00153ff905ddbe2929955f90fc820f97124aa3456222607b79760fe4590a050892b9c53abaa01c",
+          "sha256": "ad86b08286791ccb969ec2f9c1b82c4519bc6c727757babcf2e79009c36d0b85",
+          "sha1": "29f63dfd6ef9f03a774ec2374da417d37b00b5cd",
+          "md5": "ed408429c364fd9ac2aa64551145f685"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-parent",
+          "version": {
+            "requires": "3.3.2"
+          }
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter",
+          "version": {
+            "requires": "3.2.2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "logging-starter-0.0.1-SNAPSHOT.jar",
+          "url": "logging-starter-0.0.1-SNAPSHOT.jar",
+          "size": 1453,
+          "sha512": "12aad5ab9a270faf604d4d6af6ce879d119c0b7ba43771201e00153ff905ddbe2929955f90fc820f97124aa3456222607b79760fe4590a050892b9c53abaa01c",
+          "sha256": "ad86b08286791ccb969ec2f9c1b82c4519bc6c727757babcf2e79009c36d0b85",
+          "sha1": "29f63dfd6ef9f03a774ec2374da417d37b00b5cd",
+          "md5": "ed408429c364fd9ac2aa64551145f685"
+        }
+      ]
+    }
+  ]
+}
