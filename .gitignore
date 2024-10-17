@@ -37,4 +37,6 @@ out/
 .vscode/
 
 ### gen jar ###
-
+maven-repo/**
+!maven-repo/**/
+!maven-repo/**/*.jar
