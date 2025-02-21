@@ -42,6 +42,9 @@ tasks.named('compileJava') {
 }
 
 publishing {
+
+    def repoDir = "${project.projectDir.toString()}/maven-repo/"
+
     publications {
         maven (MavenPublication) {
             groupId = rootProject.getGroup()
@@ -52,9 +55,24 @@ publishing {
         }
     }
 
+    publish {
+        def groupId = rootProject.getGroup()
+        def artifactId = rootProject.getName()
+        def version = rootProject.getVersion()
+
+        def repoPath = "${repoDir}${groupId.replace('.', '/')}/${artifactId}/${version}"
+        def artifactPath = new File(repoPath)
+        // Проверяем, существует ли уже артефакт с текущей версией
+        if (artifactPath.exists()) {
+            logger.lifecycle("An artifact with version ${version} already exists. Replacing the library with a new version...")
+
+            delete repoPath
+        }
+    }
+
     repositories {
         maven {
-            url = "file://${project.projectDir.toString()}/maven-repo/"
+            url = "file://${repoDir}"
         }
     }
 }
