@@ -25,11 +25,13 @@ public class LoggingStarterAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(name = "logging-starter.log-execution-time.enabled", matchIfMissing = true)
     public LogExecutionTimeAspect logExecutionTimeAspect() {
         return new LogExecutionTimeAspect();
     }
 
     @Bean("loggingFilterRegistationBean")
+    @ConditionalOnProperty(name = "logging-starter.filter.enabled", matchIfMissing = true)
     public FilterRegistrationBean<LogFilter> loggingFilter() {
         FilterRegistrationBean<LogFilter> registrationBean = new FilterRegistrationBean<>();
 
