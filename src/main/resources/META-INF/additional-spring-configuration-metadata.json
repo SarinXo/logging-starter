@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "logging-starter.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables or disables Logging-starter.",
+      "defaultValue": true
+    }
+  ]
+}

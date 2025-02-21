@@ -6,14 +6,39 @@ plugins {
 group = 'ilya.project'
 version = '0.0.1-SNAPSHOT'
 
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
+
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
+def springVersion = '3.3.2'
+
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-parent:3.3.2'
-    implementation 'org.springframework.boot:spring-boot-starter:3.2.2'
+    implementation "org.springframework.boot:spring-boot-starter-parent:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
+
+    //configuration metadata
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springVersion}"
+
+    //Aspects
+    implementation "org.springframework.boot:spring-boot-starter-aop:${springVersion}"
+
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType(ProcessResources).configureEach {
+    filteringCharset = "UTF-8"
+}
+
+tasks.named('compileJava') {
+    inputs.files(tasks.named('processResources'))
 }
 
 publishing {
