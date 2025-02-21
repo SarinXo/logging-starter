@@ -1,6 +1,6 @@
 package ilya.project.loggingstarter.filter;
 
-import ilya.project.loggingstarter.config.LoggingStarterAutoConfiguration;
+import ilya.project.loggingstarter.config.property.FilterProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpFilter;
@@ -16,22 +16,31 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
 public class LogFilter extends HttpFilter {
 
     private final static Logger log = LoggerFactory.getLogger(LogFilter.class);
+    private static final String DEFAULT_SECURE_VALUE = "***";
 
-    private static String formatQueryString(HttpServletRequest request) {
+    private final FilterProperties filterProperties;
+
+    public LogFilter(FilterProperties filterProperties) {
+        this.filterProperties = filterProperties;
+    }
+
+    private String formatQueryString(HttpServletRequest request) {
         return Optional
                 .ofNullable(request.getQueryString())
                 .map(qs -> "?=" + qs)
                 .orElse(Strings.EMPTY);
     }
 
-    private static String inlineHeaders(HttpServletRequest request) {
+    private String inlineHeaders(HttpServletRequest request) {
         Map<String, String> headersMap = Collections.list(request.getHeaderNames())
                 .stream()
                 .collect(Collectors.toMap(
@@ -39,13 +48,30 @@ public class LogFilter extends HttpFilter {
                         request::getHeader)
                 );
         return headersMap.entrySet().stream()
-                .map(entry -> {
-                    String headerName = entry.getKey();
-                    String headerValue = entry.getValue();
-
-                    return headerName + "=" + headerValue;
-                })
+                .map(this::headerString)
                 .collect(Collectors.joining(", "));
+    }
+
+    private String headerString(Map.Entry<String, String> header) {
+        String headerName = header.getKey();
+        String headerValue = secureHeaderIfNecessary(header.getValue());
+
+        return headerName + "=" + headerValue;
+    }
+
+    public String secureHeaderIfNecessary(String headerValue) {
+        return isNeedSecure(headerValue, filterProperties.secure())
+                ? DEFAULT_SECURE_VALUE
+                : headerValue;
+    }
+
+    public boolean isNeedSecure(String input, Set<Pattern> patterns) {
+        for (Pattern pattern : patterns) {
+            if (pattern.matcher(input).matches()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -67,6 +93,7 @@ public class LogFilter extends HttpFilter {
 
             int status = response.getStatus();
             String responseBody = new String(responseWrapper.getContentAsByteArray(), responseWrapper.getCharacterEncoding());
+
 
             log.debug("Ответ на запрос: {} метод: {} URI перехода: {} статус: {} Тело ответа: {}", requestId, method, requestUri, status, responseBody);
         } finally {

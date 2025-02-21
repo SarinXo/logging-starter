@@ -1,6 +1,7 @@
 package ilya.project.loggingstarter.config;
 
 import ilya.project.loggingstarter.adpect.LogExecutionTimeAspect;
+import ilya.project.loggingstarter.config.property.FilterProperties;
 import ilya.project.loggingstarter.filter.LogFilter;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -16,6 +17,12 @@ import org.springframework.core.Ordered;
 public class LoggingStarterAutoConfiguration {
 
     private final static Logger log = LoggerFactory.getLogger(LoggingStarterAutoConfiguration.class);
+
+    private final FilterProperties filterProperties;
+
+    public LoggingStarterAutoConfiguration(FilterProperties filterProperties) {
+        this.filterProperties = filterProperties;
+    }
 
     @PostConstruct
     public void init() {
@@ -35,7 +42,8 @@ public class LoggingStarterAutoConfiguration {
     public FilterRegistrationBean<LogFilter> loggingFilter() {
         FilterRegistrationBean<LogFilter> registrationBean = new FilterRegistrationBean<>();
 
-        registrationBean.setFilter(new LogFilter());
+        LogFilter logFilter = new LogFilter(filterProperties);
+        registrationBean.setFilter(logFilter);
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
         return registrationBean;
