@@ -24,6 +24,11 @@ public record FilterProperties(
          */
         @DefaultValue
         @JsonPathCollection
-        Set<String> secureJsonBodyPaths
+        Set<String> secureJsonBodyPaths,
+        /**
+         * Отключение логирования для эндпоинтов с такими url
+         */
+        @DefaultValue
+        Set<String> withoutLogging
 ) {
 }

@@ -44,6 +44,13 @@ public class LogFilter extends HttpFilter {
             HttpServletResponse response,
             FilterChain chain
     ) throws IOException, ServletException {
+        for (var path : filterProperties.withoutLogging()) {
+            if(request.getRequestURI().startsWith(path)) {
+                super.doFilter(request, response, chain);
+                return;
+            }
+        }
+
         String requestId = request.getRequestId();
         String method = request.getMethod();
         String requestUri = request.getRequestURI() + formatQueryString(request);
