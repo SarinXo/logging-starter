@@ -1,5 +1,6 @@
 package ilya.project.loggingstarter.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ilya.project.loggingstarter.adpect.LogExecutionTimeAspect;
 import ilya.project.loggingstarter.config.property.FilterProperties;
 import ilya.project.loggingstarter.filter.LogFilter;
@@ -42,7 +43,7 @@ public class LoggingStarterAutoConfiguration {
     public FilterRegistrationBean<LogFilter> loggingFilter() {
         FilterRegistrationBean<LogFilter> registrationBean = new FilterRegistrationBean<>();
 
-        LogFilter logFilter = new LogFilter(filterProperties);
+        LogFilter logFilter = new LogFilter(filterProperties, new ObjectMapper());
         registrationBean.setFilter(logFilter);
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
