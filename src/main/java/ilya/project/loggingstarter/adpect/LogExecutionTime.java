@@ -1,4 +1,4 @@
-package ilya.project.loggingstarter.annotation;
+package ilya.project.loggingstarter.adpect;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

@@ -1,6 +1,5 @@
 package ilya.project.loggingstarter.adpect;
 
-import ilya.project.loggingstarter.annotation.LogExecutionTime;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,7 +15,7 @@ public class LogExecutionTimeAspect {
 
     private final static Logger log = LoggerFactory.getLogger(LogExecutionTimeAspect.class);
 
-    @Around("@annotation(ilya.project.loggingstarter.annotation.LogExecutionTime)")
+    @Around("@annotation(ilya.project.loggingstarter.adpect.LogExecutionTime)")
     public Object logExecutionTimeMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();

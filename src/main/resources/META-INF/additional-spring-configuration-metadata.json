@@ -5,6 +5,27 @@
       "type": "java.lang.Boolean",
       "description": "Enables or disables Logging-starter.",
       "defaultValue": true
+    },
+    {
+      "name": "secureHeaderPatterns.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables or disables filters in logging starter",
+      "defaultValue": true
+    },
+    {
+      "name": "logging-starter.filter.secure-header-patterns",
+      "type": "java.util.Set<java.util.regex.Pattern>",
+      "description": "Enables or disables Logging-starter."
+    },
+    {
+      "name": "logging-starter.filter.secure-json-body-paths",
+      "type": "java.util.Set<java.lang.String>",
+      "description": "Json paths like a 'jsonVal.jsonVal.jsonVal ...' that will be defended."
+    },
+    {
+      "name": "logging-starter.filter.without-logging",
+      "type": "java.util.Set<java.lang.String>",
+      "description": "Patterns of endpoint strings to which no logging is needed."
     }
   ]
 }
