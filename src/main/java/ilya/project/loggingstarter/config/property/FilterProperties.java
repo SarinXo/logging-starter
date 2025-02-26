@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.Set;
-import java.util.regex.Pattern;
 
 @Validated
 @ConfigurationProperties(prefix = "logging-starter.filter")
@@ -14,10 +13,10 @@ public record FilterProperties(
         @DefaultValue("true")
         boolean enabled,
         /**
-         * Паттерны для регулярных выражений по которым будут скрываться заголовки.
+         * Заголовки, которые будут отключены.
          */
         @DefaultValue
-        Set<Pattern> secureHeaderPatterns,
+        Set<String> secureHeaders,
         /**
          * Пути для json объектов, по которым будут скрываться переменные.
          * Должны соответствовать паттерну (json переменная).(json переменная). ... и т.д.
@@ -26,7 +25,7 @@ public record FilterProperties(
         @JsonPathCollection
         Set<String> secureJsonBodyPaths,
         /**
-         * Отключение логирования для эндпоинтов с такими url
+         * Отключение логирования для эндпоинтов с такими url. Проверяется через AntPathMatcher
          */
         @DefaultValue
         Set<String> withoutLogging

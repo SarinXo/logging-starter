@@ -3,26 +3,26 @@
   <groupId>ilya.project</groupId>
   <artifactId>logging-starter</artifactId>
   <versioning>
-    <lastUpdated>20250222091136</lastUpdated>
+    <lastUpdated>20250226123552</lastUpdated>
     <snapshot>
-      <timestamp>20250222.091136</timestamp>
+      <timestamp>20250226.123552</timestamp>
       <buildNumber>1</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
-        <extension>module</extension>
-        <value>0.0.1-20250222.091136-1</value>
-        <updated>20250222091136</updated>
+        <extension>jar</extension>
+        <value>0.0.1-20250226.123552-1</value>
+        <updated>20250226123552</updated>
       </snapshotVersion>
       <snapshotVersion>
-        <extension>jar</extension>
-        <value>0.0.1-20250222.091136-1</value>
-        <updated>20250222091136</updated>
+        <extension>module</extension>
+        <value>0.0.1-20250226.123552-1</value>
+        <updated>20250226123552</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>0.0.1-20250222.091136-1</value>
-        <updated>20250222091136</updated>
+        <value>0.0.1-20250226.123552-1</value>
+        <updated>20250226123552</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>

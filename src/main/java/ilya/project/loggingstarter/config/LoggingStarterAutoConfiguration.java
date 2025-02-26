@@ -9,12 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.Ordered;
 
 @AutoConfiguration
 @ConditionalOnProperty(name = "logging-starter.enabled", matchIfMissing = true)
+@ConfigurationPropertiesScan("ilya.project.loggingstarter.config.property")
 public class LoggingStarterAutoConfiguration {
 
     private final static Logger log = LoggerFactory.getLogger(LoggingStarterAutoConfiguration.class);
@@ -40,14 +40,8 @@ public class LoggingStarterAutoConfiguration {
 
     @Bean("loggingFilterRegistationBean")
     @ConditionalOnProperty(name = "logging-starter.filter.enabled", matchIfMissing = true)
-    public FilterRegistrationBean<LogFilter> loggingFilter() {
-        FilterRegistrationBean<LogFilter> registrationBean = new FilterRegistrationBean<>();
-
-        LogFilter logFilter = new LogFilter(filterProperties, new ObjectMapper());
-        registrationBean.setFilter(logFilter);
-        registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-
-        return registrationBean;
+    public LogFilter loggingFilter() {
+        return new LogFilter(filterProperties);
     }
 
 }
