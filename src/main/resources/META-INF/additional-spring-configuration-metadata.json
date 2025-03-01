@@ -1,0 +1,31 @@
+{
+  "properties": [
+    {
+      "name": "logging-starter.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables or disables Logging-starter.",
+      "defaultValue": true
+    },
+    {
+      "name": "secureHeaderPatterns.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables or disables filters in logging starter.",
+      "defaultValue": true
+    },
+    {
+      "name": "logging-starter.filter.secure-headers",
+      "type": "java.util.Set<java.lang.String>",
+      "description": "Headers that will be disabled."
+    },
+    {
+      "name": "logging-starter.filter.secure-json-body-paths",
+      "type": "java.util.Set<java.lang.String>",
+      "description": "Json paths like a '$.jsonVal.jsonVal ...' that will be secured."
+    },
+    {
+      "name": "logging-starter.filter.without-logging",
+      "type": "java.util.Set<java.lang.String>",
+      "description": "String for ant matcher."
+    }
+  ]
+}
