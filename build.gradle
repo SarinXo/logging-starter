@@ -85,10 +85,3 @@ publishing {
     }
 }
 
-gradle.taskGraph.whenReady { taskGraph ->
-    println "Выполняемые задачи:"
-    taskGraph.allTasks.each { task ->
-        println " - ${task.path}"
-    }
-}
-
