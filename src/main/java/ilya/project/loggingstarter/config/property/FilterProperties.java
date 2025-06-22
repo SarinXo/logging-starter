@@ -28,6 +28,11 @@ public record FilterProperties(
          * Отключение логирования для эндпоинтов с такими url. Проверяется через AntPathMatcher
          */
         @DefaultValue
-        Set<String> withoutLogging
+        Set<String> withoutLogging,
+        /**
+         * Включает логирование тела запроса
+         */
+        @DefaultValue("true")
+        boolean logBody
 ) {
 }

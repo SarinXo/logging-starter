@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id "io.spring.dependency-management" version "1.1.7"
 }
 
 group = 'ilya.project'
@@ -15,12 +16,15 @@ repositories {
 }
 
 def springVersion = '3.3.2'
+def feignVersion = '4.1.4'
 
 dependencies {
     implementation "org.springframework.boot:spring-boot-starter-parent:${springVersion}"
     implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
     implementation "org.springframework.boot:spring-boot-starter:${springVersion}"
     implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
+
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign:${feignVersion}"
 
     // https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path
     implementation 'com.jayway.jsonpath:json-path:2.9.0'
@@ -46,10 +50,9 @@ tasks.named('compileJava') {
     inputs.files(tasks.named('processResources'))
 }
 
+def repoDir = "${project.projectDir.toString()}/maven-repo/"
 
 publishing {
-
-    def repoDir = "${project.projectDir.toString()}/maven-repo/"
 
     publications {
         maven (MavenPublication) {
@@ -61,26 +64,26 @@ publishing {
         }
     }
 
-    gradle.taskGraph.whenReady { taskGraph ->
-        if (taskGraph.hasTask(":publish")) {
-            def groupId = rootProject.getGroup()
-            def artifactId = rootProject.getName()
-            def version = rootProject.getVersion()
-
-            def repoPath = "${repoDir}${groupId.replace('.', '/')}/${artifactId}/${version}"
-            def artifactPath = new File(repoPath)
-
-            if (artifactPath.exists()) {
-                logger.lifecycle("An artifact with version ${version} already exists. Replacing the library with a new version...")
-
-                delete repoPath
-            }
-        }
-    }
-
     repositories {
         maven {
             url = "file://${repoDir}"
+        }
+    }
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    if (taskGraph.hasTask(":publish")) {
+        def groupId = rootProject.getGroup()
+        def artifactId = rootProject.getName()
+        def version = rootProject.getVersion()
+
+        def repoPath = "${repoDir}${groupId.replace('.', '/')}/${artifactId}/${version}"
+        def artifactPath = new File(repoPath)
+
+        if (artifactPath.exists()) {
+            logger.lifecycle("An artifact with version ${version} already exists. Replacing the library with a new version...")
+
+            delete repoPath
         }
     }
 }

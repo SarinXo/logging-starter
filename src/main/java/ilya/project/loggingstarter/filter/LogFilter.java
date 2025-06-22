@@ -1,11 +1,11 @@
 package ilya.project.loggingstarter.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import ilya.project.loggingstarter.config.property.FilterProperties;
+import ilya.project.loggingstarter.service.LoggingService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpFilter;
@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
@@ -25,19 +26,16 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
 public class LogFilter extends HttpFilter {
 
     private static final String DEFAULT_SECURE_VALUE = "***";
-    private static final Logger log = LoggerFactory.getLogger(LogFilter.class);
     private static final AntPathMatcher pathMatcher = new AntPathMatcher();
     public static final Configuration jsonConfiguration = Configuration.defaultConfiguration().addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
 
-    private final FilterProperties filterProperties;
-
-    public LogFilter(FilterProperties filterProperties) {
-        this.filterProperties = filterProperties;
-    }
+    @Autowired
+    private FilterProperties filterProperties;
+    @Autowired
+    private LoggingService loggingService;
 
     @Override
     protected void doFilter(
@@ -45,40 +43,35 @@ public class LogFilter extends HttpFilter {
             HttpServletResponse response,
             FilterChain chain
     ) throws IOException, ServletException {
-        for (String pattern : filterProperties.withoutLogging()) {
-            String path = request.getRequestURI();
-            if(pathMatcher.match(pattern, path)) {
-                super.doFilter(request, response, chain);
-                return;
-            }
+        if(!isNeedToLogRequest(request)) {
+            super.doFilter(request, response, chain);
+            return;
         }
 
-        String requestId = request.getRequestId();
-        String method = request.getMethod();
-        String requestUri = request.getRequestURI() + formatQueryString(request);
-        String headers = getSecuredHeaders(request);
-
-        log.debug("Начало обработки запроса: {} метод: {} URI перехода: {} заголовки: {} ", requestId, method, requestUri, headers);
+        String securedHeaders = getSecuredHeaders(request);
+        loggingService.logRequest(request, securedHeaders);
 
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
         try {
             super.doFilter(request, responseWrapper, chain);
 
-            int status = response.getStatus();
-            String responseBody = getSecuredBody(responseWrapper);
+            String responseBody = filterProperties.logBody() ? getSecuredBody(responseWrapper) : Strings.EMPTY;
 
-            log.debug("Ответ на запрос: {} метод: {} URI перехода: {} статус: {} Тело ответа: {}", requestId, method, requestUri, status, responseBody);
+            loggingService.logResponse(request, response, responseBody);
         } finally {
             responseWrapper.copyBodyToResponse();
         }
 
     }
 
-    private String formatQueryString(HttpServletRequest request) {
-        return Optional
-                .ofNullable(request.getQueryString())
-                .map(qs -> "?=" + qs)
-                .orElse(Strings.EMPTY);
+    private boolean isNeedToLogRequest(HttpServletRequest request) {
+        for (String pattern : filterProperties.withoutLogging()) {
+            String path = request.getRequestURI();
+            if(pathMatcher.match(pattern, path)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private String getSecuredHeaders(HttpServletRequest request) {

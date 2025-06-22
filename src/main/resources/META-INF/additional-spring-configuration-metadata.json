@@ -7,6 +7,12 @@
       "defaultValue": true
     },
     {
+      "name": "logging-starter.log-body",
+      "type": "java.lang.Boolean",
+      "description": "Enables request body logging",
+      "defaultValue": true
+    },
+    {
       "name": "secureHeaderPatterns.enabled",
       "type": "java.lang.Boolean",
       "description": "Enables or disables filters in logging starter.",
